@@ -13,6 +13,11 @@
 			"sizes": "96x96"
 		},
 		{
+			"src": "/src/images/icons/app-icon-144x144.png",
+			"type": "image/png",
+			"sizes": "144x144"
+		},
+		{
 			"src": "/src/images/icons/app-icon-256x256.png",
 			"type": "image/png",
 			"sizes": "256x256"
