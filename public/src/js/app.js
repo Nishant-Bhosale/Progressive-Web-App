@@ -1,6 +1,7 @@
 var deferredPrompt;
 
 if ('serviceWorker' in navigator) {
+	//checks if the browser provides support for service workers
 	navigator.serviceWorker
 		.register('/sw.js') //second param { scope: 'path of sw'} to overwrite scope of the sw
 		.then(() => {
