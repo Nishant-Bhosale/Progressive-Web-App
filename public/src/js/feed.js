@@ -6,8 +6,10 @@ var closeCreatePostModalButton = document.querySelector(
 
 function openCreatePostModal() {
 	createPostArea.style.display = 'block';
+	console.log('hello');
 	if (deferredPrompt) {
 		deferredPrompt.prompt();
+		console.log('hello again');
 
 		deferredPrompt.userChoice.then((choiceResult) => {
 			console.log(choiceResult.outcome);

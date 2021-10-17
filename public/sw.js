@@ -1,5 +1,3 @@
-var deferredPrompt;
-
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
 });
@@ -10,9 +8,7 @@ self.addEventListener('activate', (event) => {
 	return self.clients.claim();
 });
 
-self.addEventListener('beforeinstallprompt', (event) => {
-	console.log('beforeinstallprompt fired...');
-	event.preventDefault();
-	deferredPrompt = event;
-	return false;
+self.addEventListener('fetch', (event) => {
+	console.log('Fetching...');
+	event.respondWith(fetch(event.request));
 });
