@@ -8,14 +8,10 @@ var closeCreatePostModalButton = document.querySelector(
 
 function openCreatePostModal() {
 	createPostArea.style.display = 'block';
-	console.log('hello');
 	if (deferredPrompt) {
 		deferredPrompt.prompt();
-		console.log('hello again');
 
 		deferredPrompt.userChoice.then((choiceResult) => {
-			console.log(choiceResult.outcome);
-
 			if (choiceResult.outcome === 'dismissed') {
 				console.log('User dismissed');
 			} else {
@@ -44,6 +40,7 @@ function createCard() {
 	cardTitle.style.height = '180px';
 	cardWrapper.appendChild(cardTitle);
 	var cardTitleTextElement = document.createElement('h2');
+	cardTitleTextElement.style.color = 'white';
 	cardTitleTextElement.className = 'mdl-card__title-text';
 	cardTitleTextElement.textContent = 'San Francisco Trip';
 	cardTitle.appendChild(cardTitleTextElement);
