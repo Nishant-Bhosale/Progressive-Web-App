@@ -1,7 +1,10 @@
+const STATIC_SW_VERSION = 'static-v3';
+const DYNAMIC_SW_VERSION = 'dynamic-v3';
+
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
 	event.waitUntil(
-		caches.open('static-v2').then((cache) => {
+		caches.open(STATIC_SW_VERSION).then((cache) => {
 			console.log('[Service Worker] Precaching App Shell');
 			cache.addAll([
 				'/',
@@ -23,22 +26,30 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
 	console.log('[Service Worker] Activating Service Worker...', event);
 
+	event.waitUntil(
+		caches.keys().then((keyList) => {
+			return Promise.all(
+				keyList.map((key) => {
+					if (key !== DYNAMIC_SW_VERSION && key !== STATIC_SW_VERSION) {
+						console.log('Removing static cache', key);
+						return caches.delete(key);
+					}
+				}),
+			);
+		}),
+	);
 	return self.clients.claim();
 });
 
 self.addEventListener('fetch', (event) => {
-	caches.keys().then((keys) => {
-		console.log(keys);
-	});
 	event.respondWith(
 		caches.match(event.request).then((response) => {
-			console.log(response);
 			if (response) {
 				return response;
 			} else {
 				return fetch(event.request)
 					.then((res) => {
-						return caches.open('dynamic').then((cache) => {
+						return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
 							cache.put(event.request.url, res.clone());
 							return res;
 						});
