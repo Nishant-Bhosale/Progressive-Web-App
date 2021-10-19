@@ -1,5 +1,5 @@
-const STATIC_SW_VERSION = 'static-v3';
-const DYNAMIC_SW_VERSION = 'dynamic-v3';
+const STATIC_SW_VERSION = 'static-v10';
+const DYNAMIC_SW_VERSION = 'dynamic-v5';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
@@ -26,6 +26,7 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
 	console.log('[Service Worker] Activating Service Worker...', event);
 
+	//Activate Event
 	event.waitUntil(
 		caches.keys().then((keyList) => {
 			return Promise.all(
