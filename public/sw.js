@@ -1,5 +1,5 @@
-const STATIC_SW_VERSION = 'static-v10';
-const DYNAMIC_SW_VERSION = 'dynamic-v5';
+const STATIC_SW_VERSION = 'static-v9';
+const DYNAMIC_SW_VERSION = 'dynamic-v9';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
@@ -9,6 +9,7 @@ self.addEventListener('install', (event) => {
 			cache.addAll([
 				'/',
 				'/index.html',
+				'/offline.html',
 				'/src/js/app.js',
 				'/src/js/feed.js',
 				'/src/js/material.min.js',
