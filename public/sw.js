@@ -1,5 +1,5 @@
-const STATIC_SW_VERSION = 'static-v9';
-const DYNAMIC_SW_VERSION = 'dynamic-v9';
+const STATIC_SW_VERSION = 'static-v5';
+const DYNAMIC_SW_VERSION = 'dynamic-v5';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
@@ -43,23 +43,41 @@ self.addEventListener('activate', (event) => {
 	return self.clients.claim();
 });
 
+// self.addEventListener('fetch', (event) => {
+// 	event.respondWith(
+// 		caches.match(event.request).then((response) => {
+// 			if (response) {
+// 				return response;
+// 			} else {
+// 				return fetch(event.request)
+// 					.then((res) => {
+// 						return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
+// 							cache.put(event.request.url, res.clone());
+// 							return res;
+// 						});
+// 					})
+// 					.catch((err) => {
+// 						console.log(err);
+// 						return caches.open(STATIC_SW_VERSION).then((cache) => {
+// 							return cache.match('/offline.html');
+// 						});
+// 					});
+// 			}
+// 		}),
+// 	);
+// });
+
 self.addEventListener('fetch', (event) => {
 	event.respondWith(
-		caches.match(event.request).then((response) => {
-			if (response) {
-				return response;
-			} else {
-				return fetch(event.request)
-					.then((res) => {
-						return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
-							cache.put(event.request.url, res.clone());
-							return res;
-						});
-					})
-					.catch((err) => {
-						console.log(err);
-					});
-			}
-		}),
+		fetch(event.request)
+			.then((response) => {
+				return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
+					cache.put(event.request.url, response.clone());
+					return response;
+				});
+			})
+			.catch((err) => {
+				return caches.match(event.request);
+			}),
 	);
 });
