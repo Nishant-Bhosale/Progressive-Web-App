@@ -109,7 +109,9 @@ self.addEventListener('fetch', (event) => {
 						.catch((err) => {
 							console.log(err);
 							return caches.open(STATIC_SW_VERSION).then((cache) => {
-								return cache.match('/offline.html');
+								if (event.request.headers.get('accept').includes('text/html')) {
+									return cache.match('/offline.html');
+								}
 							});
 						});
 				}
