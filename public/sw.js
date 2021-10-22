@@ -24,16 +24,6 @@ self.addEventListener('install', (event) => {
 	);
 });
 
-const trimCache = (cacheName, maxLength) => {
-	caches.open(cacheName).then((cache) => {
-		return cache.keys().then((keys) => {
-			if (keys.length > maxLength) {
-				cache.delete(keys[0]).then(trimCache(cacheName, maxLength));
-			}
-		});
-	});
-};
-
 self.addEventListener('activate', (event) => {
 	console.log('[Service Worker] Activating Service Worker...', event);
 
@@ -51,6 +41,46 @@ self.addEventListener('activate', (event) => {
 		}),
 	);
 	return self.clients.claim();
+});
+
+self.addEventListener('fetch', (event) => {
+	const url = 'https://httpbin.org/get';
+	if (event.request.url.indexOf(url) > -1) {
+		event.respondWith(
+			caches.open(DYNAMIC_SW_VERSION).then((cache) => {
+				return fetch(event.request).then((res) => {
+					// trimCache(DYNAMIC_SW_VERSION, 4);
+					cache.put(event.request, res.clone());
+					return res;
+				});
+			}),
+		);
+	} else {
+		event.respondWith(
+			caches.match(event.request).then((response) => {
+				if (response) {
+					return response;
+				} else {
+					return fetch(event.request)
+						.then((res) => {
+							return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
+								// trimCache(DYNAMIC_SW_VERSION, 4);
+								cache.put(event.request.url, res.clone());
+								return res;
+							});
+						})
+						.catch((err) => {
+							console.log(err);
+							return caches.open(STATIC_SW_VERSION).then((cache) => {
+								if (event.request.headers.get('accept').includes('text/html')) {
+									return cache.match('/offline.html');
+								}
+							});
+						});
+				}
+			}),
+		);
+	}
 });
 
 // self.addEventListener('fetch', (event) => {
@@ -92,42 +122,12 @@ self.addEventListener('activate', (event) => {
 // 	);
 // });
 
-self.addEventListener('fetch', (event) => {
-	const url = 'https://httpbin.org/get';
-	if (event.request.url.indexOf(url) > -1) {
-		event.respondWith(
-			caches.open(DYNAMIC_SW_VERSION).then((cache) => {
-				return fetch(event.request).then((res) => {
-					trimCache(DYNAMIC_SW_VERSION, 4);
-					cache.put(event.request, res.clone());
-					return res;
-				});
-			}),
-		);
-	} else {
-		event.respondWith(
-			caches.match(event.request).then((response) => {
-				if (response) {
-					return response;
-				} else {
-					return fetch(event.request)
-						.then((res) => {
-							return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
-								trimCache(DYNAMIC_SW_VERSION, 4);
-								cache.put(event.request.url, res.clone());
-								return res;
-							});
-						})
-						.catch((err) => {
-							console.log(err);
-							return caches.open(STATIC_SW_VERSION).then((cache) => {
-								if (event.request.headers.get('accept').includes('text/html')) {
-									return cache.match('/offline.html');
-								}
-							});
-						});
-				}
-			}),
-		);
-	}
-});
+// const trimCache = (cacheName, maxLength) => {
+// 	caches.open(cacheName).then((cache) => {
+// 		return cache.keys().then((keys) => {
+// 			if (keys.length > maxLength) {
+// 				cache.delete(keys[0]).then(trimCache(cacheName, maxLength));
+// 			}
+// 		});
+// 	});
+// };
