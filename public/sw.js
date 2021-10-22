@@ -24,6 +24,16 @@ self.addEventListener('install', (event) => {
 	);
 });
 
+const trimCache = (cacheName, maxLength) => {
+	caches.open(cacheName).then((cache) => {
+		return cache.keys().then((keys) => {
+			if (keys.length > maxLength) {
+				cache.delete(keys[0]).then(trimCache(cacheName, maxLength));
+			}
+		});
+	});
+};
+
 self.addEventListener('activate', (event) => {
 	console.log('[Service Worker] Activating Service Worker...', event);
 
@@ -88,6 +98,7 @@ self.addEventListener('fetch', (event) => {
 		event.respondWith(
 			caches.open(DYNAMIC_SW_VERSION).then((cache) => {
 				return fetch(event.request).then((res) => {
+					trimCache(DYNAMIC_SW_VERSION, 4);
 					cache.put(event.request, res.clone());
 					return res;
 				});
@@ -102,6 +113,7 @@ self.addEventListener('fetch', (event) => {
 					return fetch(event.request)
 						.then((res) => {
 							return caches.open(DYNAMIC_SW_VERSION).then((cache) => {
+								trimCache(DYNAMIC_SW_VERSION, 4);
 								cache.put(event.request.url, res.clone());
 								return res;
 							});
