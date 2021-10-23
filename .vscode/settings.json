@@ -1,0 +1,13 @@
+{
+	"typescript.check.npmIsInstalled": false,
+	"typescript.format.enable": false,
+	"typescript.format.insertSpaceAfterKeywordsInControlFlowStatements": false,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+	"typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+	"typescript.format.insertSpaceAfterSemicolonInForStatements": false,
+	"typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": false,
+	"typescript.preferences.useAliasesForRenames": false,
+	"typescript.reportStyleChecksAsWarnings": false,
+	"typescript.surveys.enabled": false,
+	"typescript.validate.enable": false
+}

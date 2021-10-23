@@ -44,7 +44,8 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-	const url = 'https://httpbin.org/get';
+	const url =
+		'https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json';
 	if (event.request.url.indexOf(url) > -1) {
 		event.respondWith(
 			caches.open(DYNAMIC_SW_VERSION).then((cache) => {
