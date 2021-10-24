@@ -1,8 +1,8 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const STATIC_SW_VERSION = 'static-v7';
-const DYNAMIC_SW_VERSION = 'dynamic-v6';
+const STATIC_SW_VERSION = 'static-v9';
+const DYNAMIC_SW_VERSION = 'dynamic-v9';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);

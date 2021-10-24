@@ -91,25 +91,35 @@ fetch(url)
 		updateUI(updatedData);
 	});
 
-if ('caches' in window) {
-	caches
-		.match(url)
-		.then((response) => {
-			if (response) {
-				return response.json();
-			}
-		})
-		.then((data) => {
-			if (!networkResponseReceived) {
-				console.log('data recieved from cache');
-
-				let updatedData = [];
-
-				for (let key in data) {
-					updatedData.push(data[key]);
-				}
-
-				updateUI(updatedData);
-			}
-		});
+if ('indexedDB' in window) {
+	readAllData('posts').then((data) => {
+		console.log('working');
+		if (!networkResponseReceived) {
+			console.log('from cache', data);
+			updateUI(data);
+		}
+	});
 }
+
+// if ('caches' in window) {
+// 	caches
+// 		.match(url)
+// 		.then((response) => {
+// 			if (response) {
+// 				return response.json();
+// 			}
+// 		})
+// 		.then((data) => {
+// 			if (!networkResponseReceived) {
+// 				console.log('data recieved from cache');
+
+// 				let updatedData = [];
+
+// 				for (let key in data) {
+// 					updatedData.push(data[key]);
+// 				}
+
+// 				updateUI(updatedData);
+// 			}
+// 		});
+// }
