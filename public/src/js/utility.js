@@ -29,3 +29,16 @@ const clearAllData = (st) => {
 		return tx.complete;
 	});
 };
+
+const deleteSingleItem = (st, key) => {
+	dbPromise
+		.then((db) => {
+			const tx = db.transaction(st, 'readwrite');
+			const store = tx.objectStore(st);
+			store.delete(key);
+			return tx.complete;
+		})
+		.then(() => {
+			console.log('DELETED successfully');
+		});
+};

@@ -1,8 +1,8 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const STATIC_SW_VERSION = 'static-v12';
-const DYNAMIC_SW_VERSION = 'dynamic-v12';
+const STATIC_SW_VERSION = 'static-v14';
+const DYNAMIC_SW_VERSION = 'dynamic-v14';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
@@ -63,7 +63,9 @@ self.addEventListener('fetch', (event) => {
 					})
 					.then((data) => {
 						for (let key in data) {
-							writeData('posts', data[key]);
+							writeData('posts', data[key]).then(() => {
+								deleteSingleItem('posts', key);
+							});
 						}
 					});
 
