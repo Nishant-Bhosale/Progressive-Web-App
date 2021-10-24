@@ -149,3 +149,26 @@ self.addEventListener('fetch', (event) => {
 // 		});
 // 	});
 // };
+
+// importScripts('/src/js/idb.js');
+
+// const dbPromise = idb.open('posts-store', 1, (db) => {
+// 	if(!db.objectStoreNames.contains('posts')){
+// 		db.createObjectStore('posts', {keyPath: "id"})
+// 	}
+// })
+
+// fetch(event.request).then(res => {
+// 	const clonedRes = res.clone();
+// 	clonedRes.json().then(data => {
+// 		for(let key in data){
+// 			dbPromise.then(db => {
+// 				const tx = db.transaction('posts', 'readwrite');
+// 				const store = tx.objectStore('posts');
+// 				store.put(data[key])
+// 				return tx.complete;
+// 			})
+// 		}
+// 	})
+// 	return res;
+// })
