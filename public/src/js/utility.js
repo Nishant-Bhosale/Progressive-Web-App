@@ -15,7 +15,7 @@ const writeData = (st, data) => {
 
 const readAllData = (st) => {
 	return dbPromise.then((db) => {
-		const tx = db.transaction(st, 'read');
+		const tx = db.transaction(st, 'readonly');
 		const store = tx.objectStore('posts');
 		return store.getAll();
 	});

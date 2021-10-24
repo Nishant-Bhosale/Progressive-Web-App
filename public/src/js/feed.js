@@ -100,26 +100,3 @@ if ('indexedDB' in window) {
 		}
 	});
 }
-
-// if ('caches' in window) {
-// 	caches
-// 		.match(url)
-// 		.then((response) => {
-// 			if (response) {
-// 				return response.json();
-// 			}
-// 		})
-// 		.then((data) => {
-// 			if (!networkResponseReceived) {
-// 				console.log('data recieved from cache');
-
-// 				let updatedData = [];
-
-// 				for (let key in data) {
-// 					updatedData.push(data[key]);
-// 				}
-
-// 				updateUI(updatedData);
-// 			}
-// 		});
-// }
