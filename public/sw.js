@@ -1,4 +1,5 @@
 importScripts('/src/js/idb.js');
+importScripts('/src/js/utility.js');
 
 const STATIC_SW_VERSION = 'static-v7';
 const DYNAMIC_SW_VERSION = 'dynamic-v6';
@@ -16,6 +17,7 @@ self.addEventListener('install', (event) => {
 				'/src/js/feed.js',
 				'/src/js/promise.js',
 				'/src/js/idb.js',
+				'/src/js/utility.js',
 				'/src/js/material.min.js',
 				'/src/css/app.css',
 				'/src/css/feed.css',
@@ -26,12 +28,6 @@ self.addEventListener('install', (event) => {
 			]);
 		}),
 	);
-});
-
-const dbPromise = idb.open('posts-store', 1, (db) => {
-	if (!db.objectStoreNames.contains('posts')) {
-		db.createObjectStore('posts', { keyPath: 'id' });
-	}
 });
 
 self.addEventListener('activate', (event) => {
@@ -62,12 +58,7 @@ self.addEventListener('fetch', (event) => {
 				const clonedResponse = res.clone();
 				clonedResponse.json().then((data) => {
 					for (let key in data) {
-						dbPromise.then((db) => {
-							const tx = db.transaction('posts', 'readwrite');
-							const store = tx.objectStore('posts');
-							store.put(data[key]);
-							return tx.complete;
-						});
+						writeData('posts', data[key]);
 					}
 				});
 				return res;
