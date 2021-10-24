@@ -1,4 +1,6 @@
-const STATIC_SW_VERSION = 'static-v6';
+importScripts('/src/js/idb.js');
+
+const STATIC_SW_VERSION = 'static-v7';
 const DYNAMIC_SW_VERSION = 'dynamic-v6';
 
 self.addEventListener('install', (event) => {
@@ -12,6 +14,8 @@ self.addEventListener('install', (event) => {
 				'/offline.html',
 				'/src/js/app.js',
 				'/src/js/feed.js',
+				'/src/js/promise.js',
+				'/src/js/idb.js',
 				'/src/js/material.min.js',
 				'/src/css/app.css',
 				'/src/css/feed.css',
@@ -22,6 +26,12 @@ self.addEventListener('install', (event) => {
 			]);
 		}),
 	);
+});
+
+const dbPromise = idb.open('posts-store', 1, (db) => {
+	if (!db.objectStoreNames.contains('posts')) {
+		db.createObjectStore('posts', { keyPath: 'id' });
+	}
 });
 
 self.addEventListener('activate', (event) => {
@@ -48,12 +58,19 @@ self.addEventListener('fetch', (event) => {
 		'https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json';
 	if (event.request.url.indexOf(url) > -1) {
 		event.respondWith(
-			caches.open(DYNAMIC_SW_VERSION).then((cache) => {
-				return fetch(event.request).then((res) => {
-					// trimCache(DYNAMIC_SW_VERSION, 4);
-					cache.put(event.request, res.clone());
-					return res;
+			fetch(event.request).then((res) => {
+				const clonedResponse = res.clone();
+				clonedResponse.json().then((data) => {
+					for (let key in data) {
+						dbPromise.then((db) => {
+							const tx = db.transaction('posts', 'readwrite');
+							const store = tx.objectStore('posts');
+							store.put(data[key]);
+							return tx.complete;
+						});
+					}
 				});
+				return res;
 			}),
 		);
 	} else {
