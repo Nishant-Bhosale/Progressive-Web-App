@@ -120,3 +120,9 @@ form.addEventListener('submit', function (event) {
 
 	closeCreatePostModal();
 });
+
+if ('serviceWorker' in navigator && 'SyncManager' in window) {
+	navigator.serviceWorker.ready.then((sw) => {
+		sw.sync.register('sync-new-posts');
+	});
+}
