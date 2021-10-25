@@ -123,6 +123,21 @@ form.addEventListener('submit', function (event) {
 
 if ('serviceWorker' in navigator && 'SyncManager' in window) {
 	navigator.serviceWorker.ready.then((sw) => {
-		sw.sync.register('sync-new-posts');
+		const post = {
+			id: new Date().toISOString(),
+			title: titleInput.value,
+			location: locationInput.value,
+		};
+
+		writeData('sync-posts', post)
+			.then(() => {
+				sw.sync.register('sync-new-posts');
+				const snackBar = document.getElementById('confirmation-toast');
+				const data = { message: 'Your post was saved for syncing!' };
+				snackBar.MaterialSnackBar.showSnackBar(data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	});
 }
