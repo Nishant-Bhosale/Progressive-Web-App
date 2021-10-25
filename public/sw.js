@@ -1,8 +1,8 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const STATIC_SW_VERSION = 'static-v14';
-const DYNAMIC_SW_VERSION = 'dynamic-v14';
+const STATIC_SW_VERSION = 'static-v27';
+const DYNAMIC_SW_VERSION = 'dynamic-v17';
 
 self.addEventListener('install', (event) => {
 	console.log('[Service Worker] Installing Service worker...', event);
@@ -156,6 +156,8 @@ self.addEventListener('fetch', (event) => {
 // 		db.createObjectStore('posts', {keyPath: "id"})
 // 	}
 // })
+
+//sdlfjaklfjdlj
 
 // fetch(event.request).then(res => {
 // 	const clonedRes = res.clone();
