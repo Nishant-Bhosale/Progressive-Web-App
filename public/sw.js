@@ -1,7 +1,7 @@
 importScripts('/src/js/idb.js');
 importScripts('/src/js/utility.js');
 
-const STATIC_SW_VERSION = 'static-v19';
+const STATIC_SW_VERSION = 'static-v33';
 const DYNAMIC_SW_VERSION = 'dynamic-v17';
 
 self.addEventListener('install', (event) => {
@@ -93,6 +93,42 @@ self.addEventListener('fetch', (event) => {
 									return cache.match('/offline.html');
 								}
 							});
+						});
+				}
+			}),
+		);
+	}
+});
+
+self.addEventListener('sync', (event) => {
+	if (event.tag === 'sync-new-posts') {
+		event.waitUntil(
+			readAllData('sync-posts').then((data) => {
+				for (let post of data) {
+					fetch(
+						'https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json',
+						{
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+								'Accept': 'application/json',
+							},
+							body: JSON.stringify({
+								id: post.id,
+								title: post.title,
+								location: post.location,
+								image: post.image,
+							}),
+						},
+					)
+						.then((res) => {
+							console.log('POSTED');
+							if (res.ok) {
+								deleteSingleItem('sync-posts', post.id);
+							}
+						})
+						.catch((err) => {
+							console.log(err);
 						});
 				}
 			}),

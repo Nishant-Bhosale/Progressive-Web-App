@@ -150,6 +150,8 @@ form.addEventListener('submit', function (event) {
 				id: new Date().toISOString(),
 				title: titleInput.value,
 				location: locationInput.value,
+				image:
+					'https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg',
 			};
 
 			writeData('sync-posts', post)
@@ -159,7 +161,7 @@ form.addEventListener('submit', function (event) {
 				.then(() => {
 					const snackBar = document.getElementById('confirmation-toast');
 					const data = { message: 'Your post was saved for syncing!' };
-					snackBar.MaterialSnackBar.showSnackBar(data);
+					snackBar.MaterialSnackbar.showSnackbar(data);
 				})
 				.catch((err) => {
 					console.log(err);
