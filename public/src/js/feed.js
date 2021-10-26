@@ -110,6 +110,30 @@ if ('indexedDB' in window) {
 	});
 }
 
+const sendData = () => {
+	fetch(url, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			'Accept': 'application/json',
+		},
+		body: JSON.stringify({
+			id: new Date().toISOString(),
+			title: titleInput.value,
+			location: locationInput.value,
+			image:
+				'https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg',
+		}),
+	})
+		.then((res) => {
+			console.log(res, 'POSTED successfully');
+			// updateUI();
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+};
+
 form.addEventListener('submit', function (event) {
 	event.preventDefault();
 
@@ -119,25 +143,29 @@ form.addEventListener('submit', function (event) {
 	}
 
 	closeCreatePostModal();
+
+	if ('serviceWorker' in navigator && 'SyncManager' in window) {
+		navigator.serviceWorker.ready.then((sw) => {
+			const post = {
+				id: new Date().toISOString(),
+				title: titleInput.value,
+				location: locationInput.value,
+			};
+
+			writeData('sync-posts', post)
+				.then(() => {
+					return sw.sync.register('sync-new-posts');
+				})
+				.then(() => {
+					const snackBar = document.getElementById('confirmation-toast');
+					const data = { message: 'Your post was saved for syncing!' };
+					snackBar.MaterialSnackBar.showSnackBar(data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		});
+	} else {
+		sendData();
+	}
 });
-
-if ('serviceWorker' in navigator && 'SyncManager' in window) {
-	navigator.serviceWorker.ready.then((sw) => {
-		const post = {
-			id: new Date().toISOString(),
-			title: titleInput.value,
-			location: locationInput.value,
-		};
-
-		writeData('sync-posts', post)
-			.then(() => {
-				sw.sync.register('sync-new-posts');
-				const snackBar = document.getElementById('confirmation-toast');
-				const data = { message: 'Your post was saved for syncing!' };
-				snackBar.MaterialSnackBar.showSnackBar(data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	});
-}
