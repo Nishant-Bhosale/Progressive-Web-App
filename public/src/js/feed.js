@@ -78,26 +78,18 @@ function updateUI(data) {
 	}
 }
 
-const url =
-	"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json";
-
 let networkResponseReceived = false;
 
-fetch(url)
+fetch("http://localhost:5000/posts")
 	.then(function (res) {
 		return res.json();
 	})
 	.then(function (data) {
 		networkResponseReceived = true;
+		console.log(data);
 		console.log("data recieved from network");
 
-		let updatedData = [];
-
-		for (let key in data) {
-			updatedData.push(data[key]);
-		}
-
-		updateUI(updatedData);
+		updateUI(data.posts);
 	});
 
 if ("indexedDB" in window) {
@@ -111,14 +103,13 @@ if ("indexedDB" in window) {
 }
 
 const sendData = () => {
-	fetch(url, {
+	fetch("/post", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			"Accept": "application/json",
 		},
 		body: JSON.stringify({
-			id: new Date().toISOString(),
 			title: titleInput.value,
 			location: locationInput.value,
 			image:
@@ -127,7 +118,6 @@ const sendData = () => {
 	})
 		.then((res) => {
 			console.log(res, "POSTED successfully");
-			// updateUI();
 		})
 		.catch((err) => {
 			console.log(err);
@@ -147,11 +137,9 @@ form.addEventListener("submit", function (event) {
 	if ("serviceWorker" in navigator && "SyncManager" in window) {
 		navigator.serviceWorker.ready.then((sw) => {
 			const post = {
-				id: new Date().toISOString(),
 				title: titleInput.value,
 				location: locationInput.value,
-				image:
-					"https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg",
+				img: "https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg",
 			};
 
 			writeData("sync-posts", post)

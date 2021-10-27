@@ -1,7 +1,7 @@
 importScripts("/src/js/idb.js");
 importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = "static-v33";
+const STATIC_SW_VERSION = "static-v35";
 const DYNAMIC_SW_VERSION = "dynamic-v17";
 
 self.addEventListener("install", (event) => {
@@ -50,9 +50,7 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-	const url =
-		"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json";
-	if (event.request.url.indexOf(url) > -1) {
+	if (event.request.url.indexOf("http://localhost:5000/posts") > -1) {
 		event.respondWith(
 			fetch(event.request).then((res) => {
 				const clonedResponse = res.clone();
@@ -89,9 +87,7 @@ self.addEventListener("fetch", (event) => {
 						.catch((err) => {
 							console.log(err);
 							return caches.open(STATIC_SW_VERSION).then((cache) => {
-								if (event.request.headers.get("accept").includes("text/html")) {
-									return cache.match("/offline.html");
-								}
+								return cache.match("/offline.html");
 							});
 						});
 				}
@@ -105,22 +101,17 @@ self.addEventListener("sync", (event) => {
 		event.waitUntil(
 			readAllData("sync-posts").then((data) => {
 				for (let post of data) {
-					fetch(
-						"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json",
-						{
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-								"Accept": "application/json",
-							},
-							body: JSON.stringify({
-								id: post.id,
-								title: post.title,
-								location: post.location,
-								image: post.image,
-							}),
+					fetch("/post", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
 						},
-					)
+						body: JSON.stringify({
+							title: post.title,
+							location: post.location,
+							image: post.image,
+						}),
+					})
 						.then((res) => {
 							console.log("POSTED");
 							if (res.ok) {
