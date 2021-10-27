@@ -1,37 +1,37 @@
-importScripts('/src/js/idb.js');
-importScripts('/src/js/utility.js');
+importScripts("/src/js/idb.js");
+importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = 'static-v33';
-const DYNAMIC_SW_VERSION = 'dynamic-v17';
+const STATIC_SW_VERSION = "static-v33";
+const DYNAMIC_SW_VERSION = "dynamic-v17";
 
-self.addEventListener('install', (event) => {
-	console.log('[Service Worker] Installing Service worker...', event);
+self.addEventListener("install", (event) => {
+	console.log("[Service Worker] Installing Service worker...", event);
 	event.waitUntil(
 		caches.open(STATIC_SW_VERSION).then((cache) => {
-			console.log('[Service Worker] Precaching App Shell');
+			console.log("[Service Worker] Precaching App Shell");
 			cache.addAll([
-				'/',
-				'/index.html',
-				'/offline.html',
-				'/src/js/app.js',
-				'/src/js/feed.js',
-				'/src/js/promise.js',
-				'/src/js/idb.js',
-				'/src/js/utility.js',
-				'/src/js/material.min.js',
-				'/src/css/app.css',
-				'/src/css/feed.css',
-				'/src/images/main-image.jpg',
-				'https://fonts.googleapis.com/css?family=Roboto:400,700',
-				'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css',
-				'https://fonts.googleapis.com/icon?family=Material+Icons',
+				"/",
+				"/index.html",
+				"/offline.html",
+				"/src/js/app.js",
+				"/src/js/feed.js",
+				"/src/js/promise.js",
+				"/src/js/idb.js",
+				"/src/js/utility.js",
+				"/src/js/material.min.js",
+				"/src/css/app.css",
+				"/src/css/feed.css",
+				"/src/images/main-image.jpg",
+				"https://fonts.googleapis.com/css?family=Roboto:400,700",
+				"https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css",
+				"https://fonts.googleapis.com/icon?family=Material+Icons",
 			]);
 		}),
 	);
 });
 
-self.addEventListener('activate', (event) => {
-	console.log('[Service Worker] Activating Service Worker...', event);
+self.addEventListener("activate", (event) => {
+	console.log("[Service Worker] Activating Service Worker...", event);
 
 	//Activate Event
 	event.waitUntil(
@@ -39,7 +39,7 @@ self.addEventListener('activate', (event) => {
 			return Promise.all(
 				keyList.map((key) => {
 					if (key !== DYNAMIC_SW_VERSION && key !== STATIC_SW_VERSION) {
-						console.log('Removing static cache', key);
+						console.log("Removing static cache", key);
 						return caches.delete(key);
 					}
 				}),
@@ -49,22 +49,22 @@ self.addEventListener('activate', (event) => {
 	return self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
 	const url =
-		'https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json';
+		"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json";
 	if (event.request.url.indexOf(url) > -1) {
 		event.respondWith(
 			fetch(event.request).then((res) => {
 				const clonedResponse = res.clone();
 
-				clearAllData('posts')
+				clearAllData("posts")
 					.then(() => {
 						return clonedResponse.json();
 					})
 					.then((data) => {
 						for (let key in data) {
-							writeData('posts', data[key]).then(() => {
-								deleteSingleItem('posts', key);
+							writeData("posts", data[key]).then(() => {
+								console.log("DONE");
 							});
 						}
 					});
@@ -89,8 +89,8 @@ self.addEventListener('fetch', (event) => {
 						.catch((err) => {
 							console.log(err);
 							return caches.open(STATIC_SW_VERSION).then((cache) => {
-								if (event.request.headers.get('accept').includes('text/html')) {
-									return cache.match('/offline.html');
+								if (event.request.headers.get("accept").includes("text/html")) {
+									return cache.match("/offline.html");
 								}
 							});
 						});
@@ -100,18 +100,18 @@ self.addEventListener('fetch', (event) => {
 	}
 });
 
-self.addEventListener('sync', (event) => {
-	if (event.tag === 'sync-new-posts') {
+self.addEventListener("sync", (event) => {
+	if (event.tag === "sync-new-posts") {
 		event.waitUntil(
-			readAllData('sync-posts').then((data) => {
+			readAllData("sync-posts").then((data) => {
 				for (let post of data) {
 					fetch(
-						'https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json',
+						"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/posts.json",
 						{
-							method: 'POST',
+							method: "POST",
 							headers: {
-								'Content-Type': 'application/json',
-								'Accept': 'application/json',
+								"Content-Type": "application/json",
+								"Accept": "application/json",
 							},
 							body: JSON.stringify({
 								id: post.id,
@@ -122,9 +122,9 @@ self.addEventListener('sync', (event) => {
 						},
 					)
 						.then((res) => {
-							console.log('POSTED');
+							console.log("POSTED");
 							if (res.ok) {
-								deleteSingleItem('sync-posts', post.id);
+								deleteSingleItem("sync-posts", post.id);
 							}
 						})
 						.catch((err) => {
