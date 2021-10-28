@@ -1,7 +1,7 @@
 importScripts("/src/js/idb.js");
 importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = "static-v35";
+const STATIC_SW_VERSION = "static-v36";
 const DYNAMIC_SW_VERSION = "dynamic-v17";
 
 self.addEventListener("install", (event) => {
@@ -60,8 +60,10 @@ self.addEventListener("fetch", (event) => {
 						return clonedResponse.json();
 					})
 					.then((data) => {
-						for (let key in data) {
-							writeData("posts", data[key]).then(() => {
+						console.log(data);
+						for (let post of data.posts) {
+							console.log(post);
+							writeData("posts", post).then(() => {
 								console.log("DONE");
 							});
 						}
