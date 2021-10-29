@@ -113,7 +113,7 @@ const sendData = () => {
 			title: titleInput.value,
 			location: locationInput.value,
 			image:
-				"https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg",
+				"https://firebasestorage.googleapis.com/v0/b/progressive-web-app-48a59.appspot.com/o/sf-boat.jpg?alt=media&token=ad790b93-18c6-42e1-9610-2580e4f85e8d",
 		}),
 	})
 		.then((res) => {
@@ -136,14 +136,17 @@ form.addEventListener("submit", function (event) {
 
 	if ("serviceWorker" in navigator && "SyncManager" in window) {
 		navigator.serviceWorker.ready.then((sw) => {
+			//Added id
 			const post = {
+				_id: null,
 				title: titleInput.value,
 				location: locationInput.value,
-				img: "https://www.planetware.com/photos-large/VIE/vietnam-halong-bay.jpg",
+				img: "https://firebasestorage.googleapis.com/v0/b/progressive-web-app-48a59.appspot.com/o/sf-boat.jpg?alt=media&token=ad790b93-18c6-42e1-9610-2580e4f85e8d",
 			};
 
 			writeData("sync-posts", post)
 				.then(() => {
+					console.log(post);
 					return sw.sync.register("sync-new-posts");
 				})
 				.then(() => {
