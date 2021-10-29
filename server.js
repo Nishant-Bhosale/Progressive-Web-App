@@ -22,7 +22,7 @@ app.post("/post", async (req, res) => {
 		title,
 		location,
 		id,
-		image: img ? img : null,
+		image: img,
 	});
 
 	await newPost.save();
