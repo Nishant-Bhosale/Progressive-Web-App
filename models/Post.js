@@ -13,6 +13,9 @@ const PostSchema = new Schema({
 	image: {
 		type: String,
 	},
+	id: {
+		type: String,
+	},
 });
 
 const post = mongoose.model("Post", PostSchema);

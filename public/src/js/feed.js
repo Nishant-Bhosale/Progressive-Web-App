@@ -103,13 +103,14 @@ if ("indexedDB" in window) {
 }
 
 const sendData = () => {
-	fetch("/post", {
+	fetch("http://localhost:5000/post", {
 		method: "POST",
 		headers: {
 			"Content-Type": "application/json",
 			"Accept": "application/json",
 		},
 		body: JSON.stringify({
+			id: new Date().toISOString(),
 			title: titleInput.value,
 			location: locationInput.value,
 			image:
@@ -136,12 +137,13 @@ form.addEventListener("submit", function (event) {
 
 	if ("serviceWorker" in navigator && "SyncManager" in window) {
 		navigator.serviceWorker.ready.then((sw) => {
-			//Added id
+			//Modified the id
 			const post = {
-				_id: null,
+				id: new Date().toISOString(),
 				title: titleInput.value,
 				location: locationInput.value,
-				img: "https://firebasestorage.googleapis.com/v0/b/progressive-web-app-48a59.appspot.com/o/sf-boat.jpg?alt=media&token=ad790b93-18c6-42e1-9610-2580e4f85e8d",
+				image:
+					"https://firebasestorage.googleapis.com/v0/b/progressive-web-app-48a59.appspot.com/o/sf-boat.jpg?alt=media&token=ad790b93-18c6-42e1-9610-2580e4f85e8d",
 			};
 
 			writeData("sync-posts", post)
@@ -162,3 +164,20 @@ form.addEventListener("submit", function (event) {
 		sendData();
 	}
 });
+
+//sdlfjaklfjdlj
+
+// fetch(event.request).then(res => {
+// 	const clonedRes = res.clone();
+// 	clonedRes.json().then(data => {
+// 		for(let key in data){
+// 			dbPromise.then(db => {
+// 				const tx = db.transaction('posts', 'readwrite');
+// 				const store = tx.objectStore('posts');
+// 				store.put(data[key])
+// 				return tx.complete;
+// 			})
+// 		}
+// 	})
+// 	return res;
+// })

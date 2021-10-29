@@ -1,7 +1,7 @@
 importScripts("/src/js/idb.js");
 importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = "static-v33333";
+const STATIC_SW_VERSION = "static-33333";
 const DYNAMIC_SW_VERSION = "dynamic-v17";
 
 self.addEventListener("install", (event) => {
@@ -103,21 +103,22 @@ self.addEventListener("sync", (event) => {
 		event.waitUntil(
 			readAllData("sync-posts").then((data) => {
 				for (let post of data) {
-					fetch("/post", {
+					fetch("http://localhost:5000/post", {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({
+							id: post.id,
 							title: post.title,
 							location: post.location,
-							image: post.image,
+							img: post.image,
 						}),
 					})
 						.then((res) => {
-							console.log("POSTED");
+							console.log(res.json());
 							if (res.ok) {
-								deleteSingleItem("sync-posts", post.id);
+								deleteSingleItem("sync-posts", res.id);
 							}
 						})
 						.catch((err) => {
@@ -184,21 +185,4 @@ self.addEventListener("sync", (event) => {
 // 	if(!db.objectStoreNames.contains('posts')){
 // 		db.createObjectStore('posts', {keyPath: "id"})
 // 	}
-// })
-
-//sdlfjaklfjdlj
-
-// fetch(event.request).then(res => {
-// 	const clonedRes = res.clone();
-// 	clonedRes.json().then(data => {
-// 		for(let key in data){
-// 			dbPromise.then(db => {
-// 				const tx = db.transaction('posts', 'readwrite');
-// 				const store = tx.objectStore('posts');
-// 				store.put(data[key])
-// 				return tx.complete;
-// 			})
-// 		}
-// 	})
-// 	return res;
 // })

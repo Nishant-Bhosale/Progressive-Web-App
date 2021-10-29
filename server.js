@@ -16,17 +16,18 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/post", async (req, res) => {
-	const { title, location, img } = req.body;
+	const { title, location, img, id } = req.body;
 
 	const newPost = new Post({
 		title,
 		location,
+		id,
 		image: img ? img : null,
 	});
 
 	await newPost.save();
 
-	res.status(201).json({ id: newPost._id, message: "Post added successfully" });
+	res.status(201).json({ id: newPost.id, message: "Post added successfully" });
 });
 
 app.get("/posts", async (req, res) => {
