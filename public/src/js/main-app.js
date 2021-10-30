@@ -35,6 +35,18 @@ const displayConfirmNotification = () => {
 			badge: "/src/images/icons/app-icon-96x96.png",
 			tag: "confirm-notification",
 			renotify: false,
+			actions: [
+				{
+					action: "confirm",
+					title: "OK",
+					icon: "/src/images/icons/app-icon-96x96.png",
+				},
+				{
+					action: "cancel",
+					title: "Cancel",
+					icon: "/src/images/icons/app-icon-96x96.png",
+				},
+			],
 		};
 
 		navigator.serviceWorker.ready.then((swreg) => {
