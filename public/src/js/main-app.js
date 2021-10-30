@@ -23,13 +23,21 @@ window.addEventListener("beforeinstallprompt", (event) => {
 	return false;
 });
 
+const displayConfirmNotification = () => {
+	const options = {
+		body: "You successfully subscribed our Notification",
+	};
+
+	new Notification("Successfully Subscribed", options);
+};
+
 const grantPermission = () => {
-	console.log("EE");
 	Notification.requestPermission((result) => {
-		if (result !== "granted") {
-			console.log("Notifications not required");
-		} else {
+		if (result === "granted") {
 			console.log("Permission granted");
+		} else {
+			displayConfirmNotification();
+			console.log("Notifications not required");
 		}
 	});
 };
@@ -40,3 +48,5 @@ if ("Notification" in window) {
 		enableNotificationButtons[i].addEventListener("click", grantPermission);
 	}
 }
+
+// https://meet.google.com/zbm-https://meet.google.com/zbm-yuzg-quxhttps://meet.google.com/zbm-yuzg-quxhttps://meet.google.com/zbm-yuzg-qux

@@ -1,7 +1,7 @@
 importScripts("/src/js/idb.js");
 importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = "static-333333";
+const STATIC_SW_VERSION = "static-333";
 const DYNAMIC_SW_VERSION = "dynamic-v17";
 
 self.addEventListener("install", (event) => {
@@ -13,7 +13,7 @@ self.addEventListener("install", (event) => {
 				"/",
 				"/index.html",
 				"/offline.html",
-				"/src/js/app.js",
+				"/src/js/main-app.js",
 				"/src/js/feed.js",
 				"/src/js/promise.js",
 				"/src/js/idb.js",
