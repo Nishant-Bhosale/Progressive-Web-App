@@ -24,20 +24,37 @@ window.addEventListener("beforeinstallprompt", (event) => {
 });
 
 const displayConfirmNotification = () => {
-	const options = {
-		body: "You successfully subscribed our Notification",
-	};
+	if ("serviceWorker" in navigator) {
+		const options = {
+			body: "You successfully subscribed our Notification",
+			icon: "/src/images/icons/app-icon-96x96.png",
+			image: "/src/images/sf-boat.jpg",
+			dir: "ltr",
+			lang: "en-US", //BCP 47
+			vibrate: [100, 50, 200],
+			badge: "/src/images/icons/app-icon-96x96.png",
+		};
 
-	new Notification("Successfully Subscribed", options);
+		navigator.serviceWorker.ready.then((swreg) => {
+			swreg.showNotification("Successfully Subscribed", options);
+		});
+	}
 };
 
 const grantPermission = () => {
 	Notification.requestPermission((result) => {
 		if (result === "granted") {
+			displayConfirmNotification();
 			console.log("Permission granted");
 		} else {
-			displayConfirmNotification();
 			console.log("Notifications not required");
+			if (Notification.permission === "denied") {
+				Notification.requestPermission((res) => {
+					if (res === "granted") {
+						displayConfirmNotification();
+					}
+				});
+			}
 		}
 	});
 };
