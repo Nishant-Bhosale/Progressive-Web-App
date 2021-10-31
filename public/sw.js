@@ -131,6 +131,20 @@ self.addEventListener("sync", (event) => {
 	}
 });
 
+self.addEventListener("notificationclick", (event) => {
+	const notification = event.notification;
+	const action = event.action;
+
+	console.log(notification);
+
+	if (action === "confirm") {
+		console.log("Confirmed Notification");
+		notification.close();
+	} else {
+		console.log(action);
+		console.log("Cancelled");
+	}
+});
 // self.addEventListener('fetch', (event) => {
 // 	event.respondWith(
 // 		caches.match(event.request).then((response) => {
