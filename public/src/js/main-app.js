@@ -79,5 +79,3 @@ if ("Notification" in window) {
 		enableNotificationButtons[i].addEventListener("click", grantPermission);
 	}
 }
-
-// https://meet.google.com/zbm-https://meet.google.com/zbm-yuzg-quxhttps://meet.google.com/zbm-yuzg-quxhttps://meet.google.com/zbm-yuzg-qux
