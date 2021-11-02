@@ -47,16 +47,18 @@ const deleteSingleItem = (st, key) => {
 		});
 };
 
-const urlBase64ToUint8Array = (base64String) => {
-	let padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-	let base64 = (base64 + padding).replace(/\-/g, "+").replace(/_/g, "/");
+function urlBase64ToUint8Array(base64String) {
+	var padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+	var base64 = (base64String + padding).replace(/\-/g, "+").replace(/_/g, "/");
 
-	const rawData = window.atob(base64);
-	let outputArray = new Uint8Array(rawData.length);
+	console.log(base64String);
+	var rawData = window.atob(base64);
+	var outputArray = new Uint8Array(rawData.length);
 
 	for (let i = 0; i < rawData.length; ++i) {
 		outputArray[i] = rawData.charCodeAt(i);
 	}
 
+	console.log(outputArray);
 	return outputArray;
-};
+}

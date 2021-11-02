@@ -63,18 +63,29 @@ const configurePushSub = () => {
 	let reg;
 	navigator.serviceWorker.ready
 		.then((swreg) => {
+			reg = swreg;
 			return swreg.pushManager.getSubscription();
 		})
 		.then((sub) => {
 			if (sub === null) {
 				//Register a new subscription
-				reg.pushManager.subscribe({
+				const publicVapidKey =
+					"BMxcTFRnK-VfM-8KOaViyMC1gWV3AI-cxtO1qm6_3zLiaPpre2hZ5GPRnbYS1EF4Z_sNZe7_7KRM3A4nYZ7PeZY";
+
+				const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
+				console.log(convertedVapidKey);
+				return reg.pushManager.subscribe({
 					userVisibleOnly: true,
+					applicationServerKey: convertedVapidKey,
 				});
 			} else {
 				//No worries
 			}
-		});
+		})
+		.then((newSub) => {
+			console.log(newSub);
+		})
+		.then();
 };
 const grantPermission = () => {
 	Notification.requestPermission((result) => {
