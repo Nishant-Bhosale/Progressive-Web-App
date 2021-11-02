@@ -55,11 +55,28 @@ const displayConfirmNotification = () => {
 	}
 };
 
+const configurePushSub = () => {
+	if (!("serviceWorker" in navigator)) {
+		return;
+	}
+
+	navigator.serviceWorker.ready
+		.then((swreg) => {
+			return swreg.pushManager.getSubscription();
+		})
+		.then((sub) => {
+			if (sub === null) {
+				//Register a new subscription
+			} else {
+				//No worries
+			}
+		});
+};
 const grantPermission = () => {
 	Notification.requestPermission((result) => {
 		if (result === "granted") {
-			displayConfirmNotification();
-			console.log("Permission granted");
+			configurePushSub();
+			// displayConfirmNotification();
 		} else {
 			console.log("Notifications not required");
 			if (Notification.permission === "denied") {
@@ -73,7 +90,7 @@ const grantPermission = () => {
 	});
 };
 
-if ("Notification" in window) {
+if ("Notification" in window && "serviceWorker" in navigator) {
 	for (let i = 0; i < enableNotificationButtons.length; i++) {
 		enableNotificationButtons[i].style.display = "inline-block";
 		enableNotificationButtons[i].addEventListener("click", grantPermission);
