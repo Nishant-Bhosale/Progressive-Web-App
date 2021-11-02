@@ -60,6 +60,7 @@ const configurePushSub = () => {
 		return;
 	}
 
+	let reg;
 	navigator.serviceWorker.ready
 		.then((swreg) => {
 			return swreg.pushManager.getSubscription();
@@ -67,6 +68,9 @@ const configurePushSub = () => {
 		.then((sub) => {
 			if (sub === null) {
 				//Register a new subscription
+				reg.pushManager.subscribe({
+					userVisibleOnly: true,
+				});
 			} else {
 				//No worries
 			}
