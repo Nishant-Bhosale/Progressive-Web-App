@@ -4,6 +4,7 @@ const cors = require("cors");
 const Post = require("./models/Post");
 const connectDB = require("./config/db.js");
 const postRouter = require("./routes/PostRoute.js");
+const subRouter = require("./routes/SubscriptionRoute.js");
 const PORT = 5000 || process.env.PORT;
 
 dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use(cors());
 app.use(postRouter);
+app.use(subRouter);
 
 app.listen(PORT, () => {
 	console.log(`Server running in ${process.env.NODE_ENV} mode on ${PORT}`);
