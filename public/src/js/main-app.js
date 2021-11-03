@@ -104,6 +104,7 @@ const configurePushSub = () => {
 			console.log(err);
 		});
 };
+
 const grantPermission = () => {
 	Notification.requestPermission((result) => {
 		if (result === "granted") {
