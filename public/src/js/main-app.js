@@ -83,9 +83,26 @@ const configurePushSub = () => {
 			}
 		})
 		.then((newSub) => {
-			console.log(newSub);
+			console.log(JSON.stringify(newSub));
+			return fetch(
+				"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/subs.json",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Accept": "application/json",
+					},
+					body: JSON.stringify(newSub),
+				},
+			);
 		})
-		.then();
+		.then((res) => {
+			console.log(res);
+			displayConfirmNotification();
+		})
+		.catch((err) => {
+			console.log(err);
+		});
 };
 const grantPermission = () => {
 	Notification.requestPermission((result) => {
