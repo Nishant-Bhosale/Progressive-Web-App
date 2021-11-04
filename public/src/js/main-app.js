@@ -84,17 +84,15 @@ const configurePushSub = () => {
 		})
 		.then((newSub) => {
 			console.log(JSON.stringify(newSub));
-			return fetch(
-				"https://progressive-web-app-48a59-default-rtdb.firebaseio.com/subs.json",
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"Accept": "application/json",
-					},
-					body: JSON.stringify(newSub),
+			console.log(JSON.stringify(newSub));
+			console.log(JSON.stringify(newSub));
+			return fetch("http://localhost:5000/sub", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
 				},
-			);
+				body: JSON.stringify(newSub),
+			});
 		})
 		.then((res) => {
 			console.log(res);
