@@ -84,8 +84,6 @@ const configurePushSub = () => {
 		})
 		.then((newSub) => {
 			console.log(JSON.stringify(newSub));
-			console.log(JSON.stringify(newSub));
-			console.log(JSON.stringify(newSub));
 			return fetch("http://localhost:5000/sub", {
 				method: "POST",
 				headers: {
@@ -95,7 +93,6 @@ const configurePushSub = () => {
 			});
 		})
 		.then((res) => {
-			console.log(res);
 			displayConfirmNotification();
 		})
 		.catch((err) => {
