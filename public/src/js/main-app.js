@@ -123,9 +123,3 @@ if ("Notification" in window && "serviceWorker" in navigator) {
 		enableNotificationButtons[i].addEventListener("click", grantPermission);
 	}
 }
-
-// Public Key:
-// BCxZO8ISa0u3tzEWENPwSmKHeTzCT718J82s_j2Zn2WcGvtW2i6jYskdtpL_0WGT3-kmOSSTuWkMGKkB1xo09Tw
-
-// Private Key:
-// 3-cXk0yXMYCOZk0j-PwR6zdlcmfVUkLTKAJHJX8zADQ
