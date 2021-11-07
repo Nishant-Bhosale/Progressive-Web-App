@@ -145,6 +145,23 @@ self.addEventListener("notificationclick", (event) => {
 		console.log("Cancelled");
 	}
 });
+
+self.addEventListener("push", (event) => {
+	console.log("Push notification received", event);
+
+	let data = { title: "new", content: "testing" };
+	if (event.data) {
+		data = JSON.parse(event.data.text());
+	}
+
+	const options = {
+		body: data.content,
+		icon: "/src/images/icons/app-icon-96x96.png",
+		badge: "/src/images/icons/app-icon-96x96.png",
+	};
+
+	event.waitUntil(self.registration.showNotification(data.title, options));
+});
 // self.addEventListener('fetch', (event) => {
 // 	event.respondWith(
 // 		caches.match(event.request).then((response) => {
