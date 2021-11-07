@@ -70,10 +70,10 @@ const configurePushSub = () => {
 			if (sub === null) {
 				//Register a new subscription
 				const publicVapidKey =
-					"BMxcTFRnK-VfM-8KOaViyMC1gWV3AI-cxtO1qm6_3zLiaPpre2hZ5GPRnbYS1EF4Z_sNZe7_7KRM3A4nYZ7PeZY";
+					"BCxZO8ISa0u3tzEWENPwSmKHeTzCT718J82s_j2Zn2WcGvtW2i6jYskdtpL_0WGT3-kmOSSTuWkMGKkB1xo09Tw";
 
 				const convertedVapidKey = urlBase64ToUint8Array(publicVapidKey);
-				console.log(convertedVapidKey);
+
 				return reg.pushManager.subscribe({
 					userVisibleOnly: true,
 					applicationServerKey: convertedVapidKey,
@@ -104,7 +104,6 @@ const grantPermission = () => {
 	Notification.requestPermission((result) => {
 		if (result === "granted") {
 			configurePushSub();
-			// displayConfirmNotification();
 		} else {
 			console.log("Notifications not required");
 			if (Notification.permission === "denied") {
@@ -124,3 +123,9 @@ if ("Notification" in window && "serviceWorker" in navigator) {
 		enableNotificationButtons[i].addEventListener("click", grantPermission);
 	}
 }
+
+// Public Key:
+// BCxZO8ISa0u3tzEWENPwSmKHeTzCT718J82s_j2Zn2WcGvtW2i6jYskdtpL_0WGT3-kmOSSTuWkMGKkB1xo09Tw
+
+// Private Key:
+// 3-cXk0yXMYCOZk0j-PwR6zdlcmfVUkLTKAJHJX8zADQ
