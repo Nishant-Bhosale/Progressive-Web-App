@@ -73,6 +73,21 @@
 				</div>
 				<main class="mdl-layout__content mat-typography">
 					<div id="create-post">
+						<video id="player" autoplay></video>
+						<canvas id="canvas" width="320px" height="240px"></canvas>
+						<button
+							class="
+								mdl-button mdl-js-button
+								mdl-button--raised mdl-button--colored
+							"
+							id="capture-btn"
+						>
+							Capture
+						</button>
+						<div id="pick-image">
+							<h6>Pick an Image instead</h6>
+							<input type="file" accept="image/*" id="image-picker" />
+						</div>
 						<form>
 							<div
 								class="
@@ -101,6 +116,21 @@
 									name="location"
 									>Location</label
 								>
+							</div>
+							<div class="input-section">
+								<button
+									class="
+										mdl-button mdl-js-button mdl-button mdl-button--colored
+									"
+									type="button"
+									id="location-btn"
+								>
+									Get Location
+								</button>
+								<div
+									class="mdl-spinner mdl-js-spinner is-active"
+									id="location-loader"
+								></div>
 							</div>
 							<br />
 							<div>

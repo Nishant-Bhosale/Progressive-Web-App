@@ -1,7 +1,7 @@
 importScripts("/src/js/idb.js");
 importScripts("/src/js/utility.js");
 
-const STATIC_SW_VERSION = "static-33";
+const STATIC_SW_VERSION = "static-3333";
 const DYNAMIC_SW_VERSION = "dynamic-v17";
 
 self.addEventListener("install", (event) => {
@@ -147,21 +147,20 @@ self.addEventListener("notificationclick", (event) => {
 			clients.matchAll().then((clis) => {
 				//Check if a browser tab is open
 				let client = clis.find((c) => {
-					return c.visibilityState === 'visible'
-				})
-			})
+					return c.visibilityState === "visible";
+				});
 
-			if(client !== undefined){
-				//Navigate to specified url
-				client.navigate('http://localhost:8080')
-				client.focus()
-			}else{
-				//Opens a new browser tab/window
-				clients.openWindow('http://localhost:8080')
-			}
-		)
-		notification.close()
-		console.log("Cancelled");
+				if (client !== undefined) {
+					//Navigate to specified url
+					client.navigate("http://localhost:8080");
+					client.focus();
+				} else {
+					//Opens a new browser tab/window
+					clients.openWindow("http://localhost:8080");
+				}
+				notification.close();
+			}),
+		);
 	}
 });
 
