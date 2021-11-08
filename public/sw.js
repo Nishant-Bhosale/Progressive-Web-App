@@ -142,6 +142,25 @@ self.addEventListener("notificationclick", (event) => {
 		notification.close();
 	} else {
 		console.log(action);
+		event.waitUntil(
+			//Match all the browser tabs
+			clients.matchAll().then((clis) => {
+				//Check if a browser tab is open
+				let client = clis.find((c) => {
+					return c.visibilityState === 'visible'
+				})
+			})
+
+			if(client !== undefined){
+				//Navigate to specified url
+				client.navigate('http://localhost:8080')
+				client.focus()
+			}else{
+				//Opens a new browser tab/window
+				clients.openWindow('http://localhost:8080')
+			}
+		)
+		notification.close()
 		console.log("Cancelled");
 	}
 });
